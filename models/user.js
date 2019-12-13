@@ -51,17 +51,17 @@ class User {
     const db = getDb();
     
     const validCartItems = this.cart.items.filter(item => {
-       db.collection('products')
+       return db.collection('products')
         .distinct('_id')
         .then(productIds => {
-          return productIds.indexOf(item.productId.toString()) >= 0; 
+          return productIds.map(id => id.toString()).indexOf(item.productId.toString()) >= 0; 
         })
         .catch(err => console.log(err));  
     })
     const cartItemIds = validCartItems.map(item => item.productId);
     
     const updatedCart = { items: validCartItems };
-
+    
     return db.collection('users')
       .updateOne({ _id: this._id }, { $set: { cart: updatedCart } })
       .then(result => {
