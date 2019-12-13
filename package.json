@@ -1,14 +1,14 @@
 {
-  "name": "nodejs-complete-guide",
+  "name": "online-shop",
   "version": "1.0.0",
-  "description": "Complete Node.js Guide",
+  "description": "e-commerce app built with Node.js",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
     "start-server": "node app.js"
   },
-  "author": "Maximilian Schwarzmüller",
+  "author": "James Katarikawe",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^1.18.3"
@@ -18,6 +18,7 @@
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
+    "mongodb": "^3.3.5",
     "pug": "^2.0.3"
   }
 }
