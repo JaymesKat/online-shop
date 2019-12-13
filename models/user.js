@@ -49,20 +49,35 @@ class User {
 
   getCart() {
     const db = getDb();
-    const cartItemIds = this.cart.items.map(item => item.productId);
-    return db
-      .collection("products")
-      .find({ _id: { $in: cartItemIds } })
-      .toArray()
-      .then(products => {
-        return products.map(p => {
-          return {
-            ...p,
-            quantity: this.cart.items.find(item => {
-              return item.productId.toString() == p._id.toString();
-            }).quantity
-          };
-        });
+    
+    const validCartItems = this.cart.items.filter(item => {
+       db.collection('products')
+        .distinct('_id')
+        .then(productIds => {
+          return productIds.indexOf(item.productId.toString()) >= 0; 
+        })
+        .catch(err => console.log(err));  
+    })
+    const cartItemIds = validCartItems.map(item => item.productId);
+    
+    const updatedCart = { items: validCartItems };
+
+    return db.collection('users')
+      .updateOne({ _id: this._id }, { $set: { cart: updatedCart } })
+      .then(result => {
+        return db.collection("products")
+          .find({ _id: { $in: cartItemIds } })
+          .toArray()
+          .then(products => {
+            return products.map(p => {
+              return {
+                ...p,
+                quantity: validCartItems.find(item => {
+                  return item.productId.toString() == p._id.toString();
+                }).quantity
+              };
+            });
+          });
       });
   }
 
