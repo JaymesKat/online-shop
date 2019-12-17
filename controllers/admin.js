@@ -6,7 +6,8 @@ exports.getAddProduct = (req, res, next) => {
     product: product,
     pageTitle: "Add Product",
     path: "/admin/add-product",
-    editing: false
+    editing: false,
+    isAuthenticated: req.session.isLoggedIn
   });
 };
 
@@ -15,7 +16,13 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  const product = new Product({ title, price, description, imageUrl, userId: req.user });
+  const product = new Product({
+    title,
+    price,
+    description,
+    imageUrl,
+    userId: req.user
+  });
   product
     .save()
     .then(result => {
@@ -33,7 +40,8 @@ exports.getEditProduct = (req, res, next) => {
         product: product,
         pageTitle: "Edit Product",
         path: "/admin/add-product",
-        editing: true
+        editing: true,
+        isAuthenticated: req.session.isLoggedIn
       });
     })
     .catch(err => console.log(err));
@@ -54,7 +62,11 @@ exports.postEditProduct = (req, res, next) => {
       product.imageUrl = imageUrl;
       return product.save();
     })
-    .then(() => res.redirect("/admin/products"))
+    .then(() =>
+      res.redirect("/admin/products", {
+        isAuthenticated: req.session.isLoggedIn
+      })
+    )
     .catch(err => console.log(err));
 };
 
@@ -65,13 +77,14 @@ exports.postDeleteProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
   Product.find()
-    .populate('userId')
+    .populate("userId")
     .then(products => {
       console.log(products);
       res.render("admin/products", {
         prods: products,
         pageTitle: "Admin Products",
-        path: "/admin/products"
+        path: "/admin/products",
+        isAuthenticated: req.session.isLoggedIn
       });
     })
     .catch(err => console.log(err));
