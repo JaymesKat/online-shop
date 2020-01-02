@@ -17,12 +17,15 @@
     "body-parser": "^1.18.3",
     "connect-flash": "^0.1.1",
     "csurf": "^1.10.0",
+    "dotenv": "^8.2.0",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
     "express-session": "^1.17.0",
     "mongodb": "^3.3.5",
     "mongoose": "^5.8.1",
+    "nodemailer": "^6.4.2",
+    "nodemailer-sendgrid-transport": "^0.2.0",
     "pug": "^2.0.3"
   }
 }

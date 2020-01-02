@@ -1,3 +1,6 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
 const path = require("path");
 
 const express = require("express");
@@ -11,7 +14,7 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const User = require('./models/user');
 const errorController = require("./controllers/error");
 
-const MONGO_DB_URL = 'mongodb://root:cRpZUMjEnWKC0dcB@cluster0-shard-00-00-aylow.mongodb.net:27017,cluster0-shard-00-01-aylow.mongodb.net:27017,cluster0-shard-00-02-aylow.mongodb.net:27017/shop?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority';
+const MONGO_DB_URL = process.env.MONGO_DB_URL;
 
 const app = express();
 
