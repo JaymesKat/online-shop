@@ -59,7 +59,6 @@ exports.postSignup = (req, res, next) => {
   const { email, password, confirmPassword } = req.body;
   User.findOne({ email: email }).then(user => {
     if(user){
-
       req.flash('error', 'Email already signed up');
       return res.redirect('/signup');
     }
@@ -138,11 +137,50 @@ exports.getNewPassword = (req, res, next) => {
   const token = req.params.token;
   User.findOne({resetToken: token, resetTokenExpiration: {$gt: Date.now()}})
     .then(user => {
+      if(!user){
+        req.flash('error', 'Reset Link is invalid or expired');
+        return res.redirect('/reset');
+      }
       res.render('auth/new-password', {
         path: '/new-password',
         pageTitle: 'New Password',
         errorMessage: req.flash('error')[0],
-        userId: user._id.toString()
+        userId: user._id.toString(),
+        passwordToken: token
       });
-    })
+     });
+}
+
+exports.postNewPassword = (req, res, next) => {
+  const { newPassword, userId, passwordToken } = req.body;
+  let resetUser
+  User.findOne({
+    resetToken: passwordToken,
+    resetTokenExpiration: {$gt: Date.now()},
+    _id: userId
+  }).then(user => {
+      if(!user){
+        req.flash('error', 'New Password cannot be set, request new password reset link');
+        return res.redirect('/reset');
+      }
+      resetUser = user;
+      return bcrypt.hash(newPassword, 12).then(hashedPassword => {
+        resetUser.password = hashedPassword;
+        resetUser.resetToken = undefined;
+        resetUser.resetTokenExpiration = undefined;
+        return resetUser.save()
+          .then(savedUser => {
+            res.redirect('/login');
+              transporter.sendMail({
+                to: savedUser.email,
+                from: 'shop@node-complete.com',
+                subject: 'New Password Set',
+                html: `<p>You have created a new password</p>`
+              });
+          })
+      })
+    }
+  )
+  
+  .catch(err => console.log(err))
 }
