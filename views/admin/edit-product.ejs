@@ -10,15 +10,19 @@
         <% if(errorMessage) { %>
             <div class="user-message user-message--error"><%= errorMessage %></div>
         <% } %>
-        <form class="product-form" action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST">
+        <form class="product-form" action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST" enctype="multipart/form-data">
             <div class="form-control">
                 <label for="title">Title</label>
                 <input  class="<%= validationErrors.find(e => e.param == 'title') ? 'invalid' : '' %>" type="text" name="title" id="title" value="<% if (editing) { %><%= product.title %><% } else {%><%= oldInput.title %><%}%>">
             </div>
             <div class="form-control">
+                <label for="image">Image</label>
+                <input type="file" name="image" id="image">
+            </div>
+            <!-- <div class="form-control">
                 <label for="imageUrl">Image URL</label>
                 <input  class="<%= validationErrors.find(e => e.param == 'imageUrl') ? 'invalid' : '' %>" type="text" name="imageUrl" id="imageUrl" value="<% if (editing) { %><%= product.imageUrl %><% } else {%><%= oldInput.imageUrl %><%}%>">
-            </div>
+            </div> -->
             <div class="form-control">
                 <label for="price">Price</label>
                 <input  class="<%= validationErrors.find(e => e.param == 'price') ? 'invalid' : '' %>" type="number" name="price" id="price" step="0.01" value="<% if (editing) { %><%= product.price %><% } else {%><%= oldInput.price %><%}%>">
