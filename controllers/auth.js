@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const sendgridTransport = require('nodemailer-sendgrid-transport');
-const { validationResult } = require('express-validator')
+const { validationResult } = require('express-validator');
 
 const User = require('../models/user');
 
@@ -17,6 +17,11 @@ exports.getLogin = (req, res, next) => {
     path: '/login',
     pageTitle: 'Login',
     errorMessage: req.flash('error')[0],
+    validationErrors: [],
+    oldInput: {
+      email: '',
+      password: ''
+    }
   });
 };
 
@@ -43,13 +48,20 @@ exports.postLogin = (req, res, next) => {
       path: '/login',
       pageTitle: 'Login',
       errorMessage: errors.array()[0].msg,
+      validationErrors: errors.array(),
+      oldInput: { email, password }
     });
   }
   User.findOne({ email })
     .then(user => {
       if(!user) {
-        req.flash('error', 'Invalid email or password');
-        return res.redirect('/login');
+        return res.status(422).render('auth/login', {
+          path: '/login',
+          pageTitle: 'Login',
+          errorMessage: 'Invalid email or password',
+          validationErrors: [{param: 'email'}, {param: 'password'}],
+          oldInput: { email, password }
+        });
       }
       bcrypt.compare(password, user.password)
         .then(doMatch => {
