@@ -104,7 +104,7 @@ app.use((error, req, res, next) => {
     });
 })
 
-mongoose.connect(MONGO_DB_URL)
+mongoose.connect(MONGO_DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 .then(() => {
     app.listen(3000);
 }).catch(err => console.log(err));
