@@ -1,8 +1,10 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
-const multer  = require('multer')
 const path = require("path");
+
+const helmet = require('helmet')
+const multer  = require('multer')
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -15,9 +17,11 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const User = require('./models/user');
 const errorController = require("./controllers/error");
 
-const MONGO_DB_URL = process.env.MONGO_DB_URL;
+const { MONGO_DB_URL, PORT } = process.env;
 
 const app = express();
+
+app.use(helmet())
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -106,5 +110,5 @@ app.use((error, req, res, next) => {
 
 mongoose.connect(MONGO_DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 .then(() => {
-    app.listen(3000);
+    app.listen(PORT || 3000);
 }).catch(err => console.log(err));
