@@ -13,7 +13,7 @@ let session = require('express-session');
 const csrf = require('csurf')
 const flash = require('connect-flash');
 const compression = require('compression');
-const morhan = require('morgan')
+const morgan = require('morgan')
 const MongoDBStore = require('connect-mongodb-session')(session);
 
 const User = require('./models/user');
