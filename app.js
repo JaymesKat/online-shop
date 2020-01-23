@@ -3,8 +3,8 @@ dotenv.config();
 
 const path = require("path");
 
-const helmet = require('helmet')
-const multer  = require('multer')
+const helmet = require('helmet');
+const multer  = require('multer');
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -12,6 +12,7 @@ const mongoose = require('mongoose');
 let session = require('express-session');
 const csrf = require('csurf')
 const flash = require('connect-flash');
+const compression = require('compression');
 const MongoDBStore = require('connect-mongodb-session')(session);
 
 const User = require('./models/user');
@@ -22,7 +23,7 @@ const { MONGO_DB_URL, PORT } = process.env;
 const app = express();
 
 app.use(helmet())
-
+app.use(compression())
 app.set("view engine", "ejs");
 app.set("views", "views");
 

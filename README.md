@@ -14,7 +14,6 @@ This is a sample online shop that offers features such as product catalog, shopp
 
 Follow instructions below to have a copy of this project up and running on your local machine for development and testing purposes. 
 
-
 ### Prerequisites
 
 You will need to have the following software installed on your system
