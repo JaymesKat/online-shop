@@ -13,6 +13,7 @@ let session = require('express-session');
 const csrf = require('csurf')
 const flash = require('connect-flash');
 const compression = require('compression');
+const morhan = require('morgan')
 const MongoDBStore = require('connect-mongodb-session')(session);
 
 const User = require('./models/user');
@@ -24,6 +25,8 @@ const app = express();
 
 app.use(helmet())
 app.use(compression())
+app.use(morgan('combined'))
+
 app.set("view engine", "ejs");
 app.set("views", "views");
 
