@@ -21,6 +21,7 @@
     "body-parser": "^1.18.3",
     "compression": "^1.7.4",
     "connect-flash": "^0.1.1",
+    "connect-mongodb-session": "^2.3.0",
     "csurf": "^1.10.0",
     "dotenv": "^8.2.0",
     "ejs": "^2.6.1",
