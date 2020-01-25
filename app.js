@@ -22,7 +22,7 @@ const cloudinaryStorage = require("multer-storage-cloudinary");
 const User = require('./models/user');
 const errorController = require("./controllers/error");
 
-const { MONGO_DB_URL, PORT } = process.env;
+const { MONGO_DB_URI, PORT } = process.env;
 
 const app = express();
 
