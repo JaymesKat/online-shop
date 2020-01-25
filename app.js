@@ -22,7 +22,7 @@ const cloudinaryStorage = require("multer-storage-cloudinary");
 const User = require('./models/user');
 const errorController = require("./controllers/error");
 
-const { MONGO_DB_URL, PORT } = process.env;
+const { MONGO_DB_URI, PORT } = process.env;
 
 const app = express();
 
@@ -62,7 +62,7 @@ app.use(session({
   secret: 'randomstring',
   resave: false,
   saveUninitialized: false,
-  store: new MongoDBStore({ uri: MONGO_DB_URL, collection: 'sessions' })
+  store: new MongoDBStore({ uri: MONGO_DB_URI, collection: 'sessions' })
 }));
 
 app.use(csrfProtection);
