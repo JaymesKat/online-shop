@@ -16,6 +16,9 @@ const compression = require('compression');
 const morgan = require('morgan')
 const MongoDBStore = require('connect-mongodb-session')(session);
 
+const cloudinary = require("./cloudinaryConfig");
+const cloudinaryStorage = require("multer-storage-cloudinary");
+
 const User = require('./models/user');
 const errorController = require("./controllers/error");
 
@@ -32,13 +35,8 @@ app.set("views", "views");
 
 const csrfProtection = csrf();
 
-const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'images');
-  },
-  filename: (req, file, cb) => {
-    cb(null, new Date().toISOString() + '-' + file.originalname)
-  }
+const storage = cloudinaryStorage({
+	cloudinary
 });
 
 const fileFilter = (req, file, cb) => {
@@ -55,7 +53,7 @@ const shopRoutes = require("./routes/shop");
 const authRoutes = require("./routes/auth");
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(multer({ storage: fileStorage, fileFilter }).single('image'));
+app.use(multer({ storage: storage, fileFilter }).single('image'));
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/images', express.static(path.join(__dirname, "images")));

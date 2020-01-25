@@ -1,13 +1,12 @@
-const mongoose = require('mongoose');
 const { validationResult } = require('express-validator');
-
+const cloudinary = require('../cloudinaryConfig');
 const Product = require("../models/product");
 const fileHelper = require('../util/file');
 
 const ITEMS_PER_PAGE = 1;
 
 exports.getAddProduct = (req, res, next) => {
-  let product = { title: "", price: "", description: "", imageUrl: "" };
+  let product = { title: "", price: "", description: "", image: { url: "" } };
   res.render("admin/edit-product", {
     product: product,
     pageTitle: "Add Product",
@@ -40,11 +39,14 @@ exports.postAddProduct = (req, res, next) => {
       oldInput: { title, price, description }
     });
   }
-  const imageUrl = image.path;
+  
   const product = new Product({
     title,
     price,
-    imageUrl,
+    image: {
+      url: image.url,
+      public_id: image.public_id
+    },
     description,
     userId: req.user
   });
@@ -58,7 +60,7 @@ exports.postAddProduct = (req, res, next) => {
       editing: false,
       errorMessage: errors.array()[0].msg,
       validationErrors: errors.array(),
-      oldInput: { title, imageUrl, price, description }
+      oldInput: { title, image, description }
     });
   } 
   
@@ -128,8 +130,17 @@ exports.postEditProduct = (req, res, next) => {
       product.price = price;
       product.description = description;
       if(image){
-        fileHelper.deleteFile(product.imageUrl);
-        product.imageUrl = image.path;
+        cloudinary.v2.uploader.destroy(product.image.public_id, function(
+					error,
+					result
+				) {
+					if (error) {
+						error.httpStatusCode = 500;
+						next(error);
+					}
+					console.log("Image deleted ".result);
+				});
+        product.image = {url: image.url, public_id: image.public_id};
       }
       return product.save()
         .then(() =>
@@ -150,14 +161,20 @@ exports.deleteProduct = (req, res, next) => {
       if(!product){
         return next(new Error('Product Not Found'));
       }
-      fileHelper.deleteFile(product.imageUrl);
+      cloudinary.v2.uploader.destroy(product.image.public_id, function(error, result){
+        if(error){
+          error.httpStatusCode = 500;
+					next(error);
+        }
+        console.log("Image deleted ".result)
+      });
       return Product.deleteOne({_id: prodId, userId: req.user._id})    
   })
   .then(() => {
-    res.status(200).json({message: "Success"})
+    res.status(200).json({message: "Success"});
   })
   .catch(err => {
-    res.status(500).json({message: "Failed to delete product"})
+    res.status(500).json({message: "Failed to delete product"});
   });
 };
 

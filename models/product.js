@@ -15,9 +15,14 @@ var productSchema = new Schema({
     type: String,
     required: true
   },
-  imageUrl: {
-    type: String,
-    required: true
+  image: {
+    public_id: {
+      type: String
+    },
+    url: {
+      type: String,
+      required: true
+    }
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
