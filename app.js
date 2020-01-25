@@ -110,7 +110,7 @@ app.use((error, req, res, next) => {
     });
 })
 
-mongoose.connect(MONGO_DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(MONGO_DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 .then(() => {
     app.listen(PORT || 3000);
 }).catch(err => console.log(err));

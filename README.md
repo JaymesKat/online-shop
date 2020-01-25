@@ -20,6 +20,10 @@ You will need to have the following software installed on your system
 
 - [Nodejs](https://nodejs.org/en/download/), a JavaScript runtime that lets you run applications outside the browser
 - NPM, a package manager for Nodejs software packages (Comes with Node)
+- MongoDB installation 
+- [Stripe](https://dashboard.stripe.com/register) account (Test account will work)
+- [Cloudinary](https://cloudinary.com/) account for image uploads
+- [Sendgrid](sendgrid.com) account
 
 ### Installing
 
@@ -44,13 +48,16 @@ npm install
 Create a `.env` file based on the `.env.example` file and populate following variables
 
 ```
-SENDGRID_API_KEY=
-MONGO_DB_URL=
-STRIPE_SECRET=
-STRIPE_KEY=
+SENDGRID_API_KEY=<sendgrid-api-key>
+MONGO_DB_URI=<mongodb-connection-uri>
+STRIPE_SECRET=<stripe-secret>
+STRIPE_KEY=<stripe-api-key>
+CLOUDINARY_CLOUD_NAME=<cloudinary-cloud-name>
+CLOUDINARY_API_KEY=<cloudinary-api-key>
+CLOUDINARY_API_SECRET=<cloudinary-api-secret>
 ```
 
-*NB:* The `MONGO_DB_URL` should be populated to configure the app with a database. I recommend setting up one on [Mongo Atlas](https://www.mongodb.com/cloud/atlas) which is easy to setup and provides a free tier.
+*NB:* The `MONGO_DB_URI` should be populated to configure the app with a database. I recommend setting up one on [Mongo Atlas](https://www.mongodb.com/cloud/atlas) which is easy to setup and provides a free tier.
 
 ## Running the application
 
