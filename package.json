@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "NODE_ENV=production node app.js",
     "start-server": "node app.js",
-    "start:dev": "nodemon app.js"
+    "start:dev": "nodemon app.js",
+    "prettify": "prettier **/*.js --write"
   },
   "author": "James Katarikawe",
   "license": "ISC",
@@ -15,7 +16,8 @@
     "node": "11.10.1"
   },
   "devDependencies": {
-    "nodemon": "^1.18.3"
+    "nodemon": "^1.18.3",
+    "prettier": "^1.19.1"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
